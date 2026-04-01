@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DOIT. — get unstuck</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --lime: #C8F135;
+    --black: #0e0e0e;
+    --white: #f5f2ea;
+    --pink: #FF4D8D;
+    --orange: #FF6B2B;
+    --blue: #1E3AFF;
+    --yellow: #FFE500;
+    --purple: #7B2FBE;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Space Mono', monospace;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    width: 20px; height: 20px;
+    background: var(--lime);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: difference;
+    transition: transform 0.15s ease;
+  }
+  .cursor.big { transform: scale(3); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 3px solid var(--lime);
+  }
+
+  .hero-left {
+    padding: 60px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--lime);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(96px, 14vw, 180px);
+    line-height: 0.88;
+    color: var(--white);
+    animation: fadeUp 0.7s ease 0.1s both;
+  }
+
+  .hero-title .accent { color: var(--lime); }
+  .hero-title .scratch {
+    position: relative;
+    display: inline-block;
+  }
+  .hero-title .scratch::after {
+    content: '';
+    position: absolute;
+    left: -4px; right: -4px;
+    top: 50%; height: 8px;
+    background: var(--pink);
+    transform: translateY(-50%) rotate(-2deg);
+    z-index: -1;
+  }
+
+  .hero-sub {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--white);
+    opacity: 0.7;
+    margin-top: 28px;
+    max-width: 380px;
+    line-height: 1.5;
+    animation: fadeUp 0.7s ease 0.2s both;
+  }
+
+  .hero-cta {
+    margin-top: 44px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    animation: fadeUp 0.7s ease 0.3s both;
+  }
+
+  .btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 16px 32px;
+    border: 2px solid currentColor;
+    cursor: none;
+    text-decoration: none;
+    transition: all 0.18s ease;
+    display: inline-block;
+  }
+  .btn-lime { color: var(--black); background: var(--lime); border-color: var(--lime); }
+  .btn-lime:hover { background: transparent; color: var(--lime); }
+  .btn-ghost { color: var(--white); background: transparent; border-color: var(--white); }
+  .btn-ghost:hover { background: var(--white); color: var(--black); }
+
+  .hero-right {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* Floating blobs */
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.35;
+    animation: blobFloat 8s ease-in-out infinite;
+  }
+  .blob-1 { width: 400px; height: 400px; background: var(--purple); top: -100px; right: -80px; animation-delay: 0s; }
+  .blob-2 { width: 280px; height: 280px; background: var(--pink); bottom: 50px; left: 20px; animation-delay: -3s; }
+  .blob-3 { width: 200px; height: 200px; background: var(--orange); top: 40%; right: 30%; animation-delay: -5s; }
+
+  @keyframes blobFloat {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-30px) scale(1.06); }
+  }
+
+  /* Big rotating pill */
+  .spin-ring {
+    position: absolute;
+    width: 340px; height: 340px;
+    border: 2px solid rgba(200, 241, 53, 0.3);
+    border-radius: 50%;
+    animation: spin 20s linear infinite;
+  }
+  .spin-ring::before {
+    content: '';
+    position: absolute;
+    top: -6px; left: 50%;
+    width: 10px; height: 10px;
+    background: var(--lime);
+    border-radius: 50%;
+    transform: translateX(-50%);
+  }
+
+  .hero-emoji-pile {
+    position: relative;
+    font-size: 80px;
+    z-index: 2;
+    animation: wobble 3s ease-in-out infinite;
+    user-select: none;
+  }
+
+  @keyframes wobble {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(4deg); }
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Ticker */
+  .ticker {
+    background: var(--lime);
+    color: var(--black);
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 12px 0;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 3px;
+    border-top: 2px solid var(--black);
+    border-bottom: 2px solid var(--black);
+  }
+  .ticker-inner {
+    display: inline-flex;
+    animation: ticker 20s linear infinite;
+  }
+  .ticker-inner span { padding: 0 40px; }
+  .ticker-inner .dot { color: var(--pink); }
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* FEATURES / TOOLS grid */
+  .section { padding: 100px 40px; position: relative; }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 5px;
+    color: var(--lime);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 7vw, 90px);
+    line-height: 0.9;
+    margin-bottom: 60px;
+  }
+
+  /* Asymmetric tool cards */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+
+  .tool-card {
+    padding: 40px 32px;
+    border: 1px solid rgba(245,242,234,0.1);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.25s ease;
+    cursor: none;
+  }
+
+  .tool-card:hover { border-color: var(--lime); }
+  .tool-card:hover .tool-bg { opacity: 1; }
+  .tool-card:hover .tool-icon { transform: scale(1.2) rotate(10deg); }
+
+  .tool-bg {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+
+  .card-lime .tool-bg   { background: rgba(200,241,53,0.06); }
+  .card-pink .tool-bg   { background: rgba(255,77,141,0.06); }
+  .card-orange .tool-bg { background: rgba(255,107,43,0.06); }
+  .card-blue .tool-bg   { background: rgba(30,58,255,0.06); }
+  .card-yellow .tool-bg { background: rgba(255,229,0,0.06); }
+  .card-purple .tool-bg { background: rgba(123,47,190,0.06); }
+
+  .tool-icon {
+    font-size: 42px;
+    margin-bottom: 20px;
+    display: block;
+    transition: transform 0.3s cubic-bezier(.34,1.56,.64,1);
+    line-height: 1;
+  }
+
+  .tool-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 34px;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    line-height: 1;
+  }
+
+  .card-lime   .tool-name { color: var(--lime); }
+  .card-pink   .tool-name { color: var(--pink); }
+  .card-orange .tool-name { color: var(--orange); }
+  .card-blue   .tool-name { color: #6B8AFF; }
+  .card-yellow .tool-name { color: var(--yellow); }
+  .card-purple .tool-name { color: #C47FFF; }
+
+  .tool-desc {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 15px;
+    line-height: 1.6;
+    opacity: 0.6;
+    position: relative;
+    z-index: 1;
+  }
+
+  .tool-corner {
+    position: absolute;
+    bottom: 16px; right: 20px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    opacity: 0.3;
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* ANXIETY section — messy editorial */
+  .anxiety-section {
+    background: var(--white);
+    color: var(--black);
+    padding: 100px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .anxiety-section::before {
+    content: 'BREATHE';
+    position: absolute;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 280px;
+    top: -20px; right: -20px;
+    opacity: 0.04;
+    color: var(--black);
+    line-height: 1;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .anxiety-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+  }
+
+  .anxiety-left .big-q {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(56px, 8vw, 110px);
+    line-height: 0.9;
+    color: var(--black);
+    margin-bottom: 30px;
+  }
+
+  .anxiety-left .big-q em {
+    font-style: normal;
+    -webkit-text-stroke: 2px var(--black);
+    color: transparent;
+  }
+
+  .anxiety-left p {
+    font-family: 'Instrument Serif', serif;
+    font-size: 20px;
+    line-height: 1.6;
+    color: var(--black);
+    opacity: 0.7;
+    max-width: 440px;
+  }
+
+  /* Breathing widget */
+  .breath-widget {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    padding: 50px 40px;
+    background: var(--black);
+    border-radius: 0;
+    border: 3px solid var(--black);
+    position: relative;
+  }
+
+  .breath-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--lime);
+    text-transform: uppercase;
+  }
+
+  .breath-circle {
+    width: 140px; height: 140px;
+    border-radius: 50%;
+    background: var(--purple);
+    display: flex;align-items:center;justify-content:center;
+    animation: breathe 8s ease-in-out infinite;
+    cursor: none;
+  }
+
+  .breath-text-inner {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 3px;
+    color: var(--white);
+    text-align: center;
+  }
+
+  @keyframes breathe {
+    0%, 100% { transform: scale(1); background: var(--purple); }
+    33% { transform: scale(1.5); background: var(--blue); }
+    66% { transform: scale(1.5); background: var(--pink); }
+  }
+
+  .breath-steps {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 12px;
+    width: 100%;
+  }
+
+  .breath-step {
+    text-align: center;
+    padding: 14px 8px;
+    border: 1px solid rgba(245,242,234,0.15);
+    font-family: 'Space Mono', monospace;
+  }
+
+  .breath-step .num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: var(--lime);
+    display: block;
+    line-height: 1;
+  }
+  .breath-step .lbl {
+    font-size: 9px;
+    letter-spacing: 2px;
+    opacity: 0.5;
+    text-transform: uppercase;
+  }
+
+  /* FOCUS / POMODORO section */
+  .focus-section {
+    background: var(--blue);
+    padding: 100px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .focus-section::after {
+    content: '';
+    position: absolute;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    border: 80px solid rgba(255,255,255,0.05);
+    bottom: -200px; right: -100px;
+  }
+
+  .pomodoro-display {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .pom-time {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(100px, 18vw, 220px);
+    line-height: 0.85;
+    color: var(--lime);
+    letter-spacing: -4px;
+  }
+
+  .pom-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 5px;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+  }
+
+  .focus-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+
+  .pom-modes {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 40px;
+  }
+
+  .pom-mode {
+    padding: 20px 24px;
+    border: 1px solid rgba(255,255,255,0.2);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: all 0.2s;
+    cursor: none;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pom-mode.active { background: var(--lime); color: var(--black); border-color: var(--lime); }
+  .pom-mode:hover:not(.active) { border-color: var(--lime); }
+
+  .pom-mode .m-icon { font-size: 28px; }
+  .pom-mode .m-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    letter-spacing: 1px;
+  }
+  .pom-mode .m-time {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    opacity: 0.6;
+    margin-top: 2px;
+  }
+
+  /* MOVEMENT section */
+  .move-section {
+    background: var(--black);
+    padding: 100px 40px;
+    border-top: 3px solid var(--orange);
+  }
+
+  .move-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    margin-top: 60px;
+    border: 2px solid rgba(255,107,43,0.3);
+  }
+
+  .move-card {
+    padding: 40px 24px 32px;
+    border-right: 2px solid rgba(255,107,43,0.3);
+    position: relative;
+    overflow: hidden;
+    transition: background 0.2s;
+    cursor: none;
+  }
+  .move-card:last-child { border-right: none; }
+  .move-card:hover { background: rgba(255,107,43,0.08); }
+
+  .move-card .m-emoji { font-size: 52px; display: block; margin-bottom: 20px; }
+  .move-card .m-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--orange);
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+  }
+  .move-card .m-why {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 14px;
+    opacity: 0.55;
+    line-height: 1.6;
+  }
+  .move-card .m-duration {
+    margin-top: 20px;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--orange);
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  /* AI Section */
+  .ai-section {
+    background: var(--lime);
+    color: var(--black);
+    padding: 100px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ai-section::before {
+    content: 'AI';
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 600px;
+    position: absolute;
+    right: -60px; top: -80px;
+    opacity: 0.07;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .ai-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .ai-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 8vw, 100px);
+    line-height: 0.9;
+    color: var(--black);
+    margin-bottom: 24px;
+  }
+
+  .ai-desc {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 19px;
+    line-height: 1.7;
+    opacity: 0.75;
+    margin-bottom: 36px;
+  }
+
+  .ai-features {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .ai-feat {
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+  }
+
+  .ai-feat .f-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--black);
+    flex-shrink: 0;
+  }
+
+  /* Chat mockup */
+  .chat-mock {
+    background: var(--black);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .chat-msg {
+    max-width: 80%;
+    padding: 14px 18px;
+    font-family: 'Instrument Serif', serif;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .chat-msg.user {
+    align-self: flex-end;
+    background: rgba(245,242,234,0.1);
+    color: var(--white);
+    border-radius: 18px 18px 4px 18px;
+  }
+
+  .chat-msg.ai {
+    align-self: flex-start;
+    background: var(--lime);
+    color: var(--black);
+    border-radius: 18px 18px 18px 4px;
+    font-style: italic;
+  }
+
+  /* FOOTER / CTA */
+  .footer-cta {
+    padding: 120px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-top: 3px solid var(--pink);
+  }
+
+  .footer-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(255,77,141,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .footer-big {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(64px, 12vw, 160px);
+    line-height: 0.88;
+    margin-bottom: 40px;
+    position: relative;
+  }
+
+  .footer-big .line-1 { color: var(--white); display: block; }
+  .footer-big .line-2 { color: var(--pink); display: block; }
+  .footer-big .line-3 { color: var(--lime); display: block; font-style: italic; }
+
+  .footer-note {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 18px;
+    opacity: 0.4;
+    margin-top: 48px;
+  }
+
+  /* Nav */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: rgba(14,14,14,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(200,241,53,0.15);
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 2px;
+    color: var(--lime);
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--pink); }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--white);
+    text-decoration: none;
+    opacity: 0.6;
+    text-transform: uppercase;
+    transition: opacity 0.15s, color 0.15s;
+  }
+  .nav-links a:hover { opacity: 1; color: var(--lime); }
+
+  /* Sticker badges */
+  .sticker {
+    display: inline-block;
+    padding: 6px 14px;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border: 2px solid;
+  }
+  .sticker-pink { border-color: var(--pink); color: var(--pink); transform: rotate(-1.5deg); }
+  .sticker-lime { border-color: var(--lime); color: var(--lime); transform: rotate(1deg); }
+
+  /* Misc decorative */
+  .noise {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .tools-grid { grid-template-columns: 1fr 1fr; }
+    .anxiety-grid, .focus-grid, .ai-grid { grid-template-columns: 1fr; }
+    .move-cards { grid-template-columns: 1fr 1fr; }
+    nav { padding: 16px 20px; }
+    .section { padding: 70px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="noise"></div>
+
+<nav>
+  <a href="#" class="nav-logo">DO<span>IT</span>.</a>
+  <ul class="nav-links">
+    <li><a href="#focus">Focus</a></li>
+    <li><a href="#anxiety">Anxiety</a></li>
+    <li><a href="#move">Move</a></li>
+    <li><a href="#ai">AI</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left" style="padding-top:120px">
+    <p class="hero-tag">✦ for people who get it but can't do it</p>
+    <h1 class="hero-title">
+      STOP<br>
+      <span class="accent">STAR</span><span class="scratch">ING</span><br>
+      AT THE<br>
+      LIST.
+    </h1>
+    <p class="hero-sub">Your brain isn't broken. It just needs a different kind of push. We built that.</p>
+    <div class="hero-cta">
+      <a href="#" class="btn btn-lime">Get unstuck →</a>
+      <a href="#" class="btn btn-ghost">See how it works</a>
+    </div>
+    <div style="margin-top:32px;display:flex;gap:12px;flex-wrap:wrap">
+      <span class="sticker sticker-pink">Free to start</span>
+      <span class="sticker sticker-lime">No BS</span>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="spin-ring"></div>
+    <div class="hero-emoji-pile">🫠</div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span>FOCUS</span><span class="dot">✦</span>
+    <span>BREATHE</span><span class="dot">✦</span>
+    <span>MOVE</span><span class="dot">✦</span>
+    <span>UNFREEZE</span><span class="dot">✦</span>
+    <span>DO THE THING</span><span class="dot">✦</span>
+    <span>FOCUS</span><span class="dot">✦</span>
+    <span>BREATHE</span><span class="dot">✦</span>
+    <span>MOVE</span><span class="dot">✦</span>
+    <span>UNFREEZE</span><span class="dot">✦</span>
+    <span>DO THE THING</span><span class="dot">✦</span>
+    <span>FOCUS</span><span class="dot">✦</span>
+    <span>BREATHE</span><span class="dot">✦</span>
+    <span>MOVE</span><span class="dot">✦</span>
+    <span>UNFREEZE</span><span class="dot">✦</span>
+    <span>DO THE THING</span><span class="dot">✦</span>
+    <span>FOCUS</span><span class="dot">✦</span>
+    <span>BREATHE</span><span class="dot">✦</span>
+    <span>MOVE</span><span class="dot">✦</span>
+    <span>UNFREEZE</span><span class="dot">✦</span>
+    <span>DO THE THING</span><span class="dot">✦</span>
+  </div>
+</div>
+
+<!-- TOOLS GRID -->
+<section class="section">
+  <p class="section-label">✦ what's inside</p>
+  <h2 class="section-title">SIX TOOLS.<br>ZERO FLUFF.</h2>
+  <div class="tools-grid">
+    <div class="tool-card card-lime">
+      <div class="tool-bg"></div>
+      <span class="tool-icon">🧩</span>
+      <div class="tool-name">Task Smasher</div>
+      <p class="tool-desc">Paste any scary task. AI chops it into steps so small your brain can't say no.</p>
+      <span class="tool-corner">AI POWERED</span>
+    </div>
+    <div class="tool-card card-pink">
+      <div class="tool-bg"></div>
+      <span class="tool-icon">👀</span>
+      <div class="tool-name">Body Double</div>
+      <p class="tool-desc">Work alongside a stranger on the internet. Turns out not being alone is everything.</p>
+      <span class="tool-corner">LIVE</span>
+    </div>
+    <div class="tool-card card-orange">
+      <div class="tool-bg"></div>
+      <span class="tool-icon">🔥</span>
+      <div class="tool-name">Fake Deadline</div>
+      <p class="tool-desc">Can't self-motivate? We'll pretend someone's waiting. Urgency is a muscle.</p>
+      <span class="tool-corner">AI POWERED</span>
+    </div>
+    <div class="tool-card card-blue">
+      <div class="tool-bg"></div>
+      <span class="tool-icon">🌬️</span>
+      <div class="tool-name">Panic Stop</div>
+      <p class="tool-desc">4-7-8 breathing, grounding exercises. For when everything is too loud in your head.</p>
+      <span class="tool-corner">INSTANT</span>
+    </div>
+    <div class="tool-card card-yellow">
+      <div class="tool-bg"></div>
+      <span class="tool-icon">🍅</span>
+      <div class="tool-name">Tomato Clock</div>
+      <p class="tool-desc">25 min on, 5 min off. Simple. Brutal. Works. Your tree lives if you stay focused.</p>
+      <span class="tool-corner">POMODORO</span>
+    </div>
+    <div class="tool-card card-purple">
+      <div class="tool-bg"></div>
+      <span class="tool-icon">💬</span>
+      <div class="tool-name">Mood Check</div>
+      <p class="tool-desc">Tell us how you're actually feeling. We'll figure out what kind of help you need.</p>
+      <span class="tool-corner">AI POWERED</span>
+    </div>
+  </div>
+</section>
+
+<!-- BREATHING / ANXIETY -->
+<section class="anxiety-section" id="anxiety">
+  <div class="anxiety-grid">
+    <div class="anxiety-left">
+      <div class="big-q">CHEST<br>TIGHT?<br><em>STOP.</em></div>
+      <p>Anxiety and stress aren't productivity problems. They're nervous system problems. Before you do anything, your body needs 90 seconds of actual calm.</p>
+    </div>
+    <div class="breath-widget">
+      <p class="breath-label">Box breathing — 4 sec each</p>
+      <div class="breath-circle">
+        <div class="breath-text-inner" id="breatheText">INHALE</div>
+      </div>
+      <div class="breath-steps">
+        <div class="breath-step">
+          <span class="num">4</span>
+          <span class="lbl">Inhale</span>
+        </div>
+        <div class="breath-step">
+          <span class="num">7</span>
+          <span class="lbl">Hold</span>
+        </div>
+        <div class="breath-step">
+          <span class="num">8</span>
+          <span class="lbl">Exhale</span>
+        </div>
+      </div>
+      <p style="font-family:'Space Mono',monospace;font-size:10px;color:rgba(245,242,234,0.4);letter-spacing:1px;text-align:center">do this 3× before touching your task list</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOCUS / POMODORO -->
+<section class="focus-section" id="focus">
+  <div class="focus-grid">
+    <div class="pomodoro-display">
+      <p class="pom-label">✦ Pomodoro Timer</p>
+      <div class="pom-time" id="pomTimer">25:00</div>
+      <p class="pom-label">like Forest, but you keep your tree</p>
+      <div style="margin-top:24px;display:flex;gap:12px">
+        <button onclick="startPom()" class="btn btn-lime" style="cursor:none;font-size:11px;padding:12px 24px">START</button>
+        <button onclick="resetPom()" class="btn btn-ghost" style="cursor:none;font-size:11px;padding:12px 24px">RESET</button>
+      </div>
+    </div>
+    <div>
+      <p class="section-label" style="color:rgba(255,255,255,0.5)">✦ pick your mode</p>
+      <div class="pom-modes">
+        <div class="pom-mode active">
+          <span class="m-icon">🍅</span>
+          <div>
+            <div class="m-name">Deep Work</div>
+            <div class="m-time">25 MIN FOCUS / 5 MIN BREAK</div>
+          </div>
+        </div>
+        <div class="pom-mode">
+          <span class="m-icon">⚡</span>
+          <div>
+            <div class="m-name">Sprint</div>
+            <div class="m-time">15 MIN FOCUS / 3 MIN BREAK</div>
+          </div>
+        </div>
+        <div class="pom-mode">
+          <span class="m-icon">🐢</span>
+          <div>
+            <div class="m-name">Ease In</div>
+            <div class="m-time">10 MIN FOCUS / 2 MIN BREAK</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MOVEMENT -->
+<section class="move-section" id="move">
+  <p class="section-label">✦ your body is part of this</p>
+  <h2 class="section-title" style="color:var(--orange)">GET UP.<br>SERIOUSLY.</h2>
+  <div class="move-cards">
+    <div class="move-card">
+      <span class="m-emoji">🏃</span>
+      <div class="m-title">Run / Walk</div>
+      <p class="m-why">10 minutes outside literally rewires your prefrontal cortex. You'll think better after.</p>
+      <p class="m-duration">10–20 min</p>
+    </div>
+    <div class="move-card">
+      <span class="m-emoji">🕺</span>
+      <div class="m-title">Dance break</div>
+      <p class="m-why">Pick one song. Move however. It sounds dumb until you do it and feel weirdly good.</p>
+      <p class="m-duration">3–5 min</p>
+    </div>
+    <div class="move-card">
+      <span class="m-emoji">🧘</span>
+      <div class="m-title">Shake it out</div>
+      <p class="m-why">Literally shake your body for 60 seconds. Trauma therapists recommend this. It works.</p>
+      <p class="m-duration">1–2 min</p>
+    </div>
+    <div class="move-card">
+      <span class="m-emoji">💧</span>
+      <div class="m-title">Cold water</div>
+      <p class="m-why">Splash cold water on your face or neck. Activates the dive reflex. Instant nervous system reset.</p>
+      <p class="m-duration">30 sec</p>
+    </div>
+  </div>
+</section>
+
+<!-- AI SECTION -->
+<section class="ai-section" id="ai">
+  <div class="ai-grid">
+    <div>
+      <h2 class="ai-title">THE AI<br>ACTUALLY<br>GETS YOU.</h2>
+      <p class="ai-desc">Not a chatbot. Not a productivity coach. Just something that reads where you're at and gives you the next smallest possible step.</p>
+      <div class="ai-features">
+        <div class="ai-feat"><div class="f-dot"></div>Breaks any task into 2-minute micro-steps</div>
+        <div class="ai-feat"><div class="f-dot"></div>Detects avoidance patterns over time</div>
+        <div class="ai-feat"><div class="f-dot"></div>Adapts tone when you're stressed vs. motivated</div>
+        <div class="ai-feat"><div class="f-dot"></div>Suggests movement when you've been stuck 30+ min</div>
+        <div class="ai-feat"><div class="f-dot"></div>Sends check-ins at times that actually work for you</div>
+      </div>
+    </div>
+    <div class="chat-mock">
+      <div class="chat-msg user">I need to apply for jobs but every time I open my laptop I just... don't</div>
+      <div class="chat-msg ai">okay. close all your tabs. literally everything. one question: can you open one company's careers page? just open it, nothing else.</div>
+      <div class="chat-msg user">yeah i can do that</div>
+      <div class="chat-msg ai">cool. that's the task. just that. i'll check in in 5 minutes.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER CTA -->
+<section class="footer-cta">
+  <div class="footer-big">
+    <span class="line-1">STOP</span>
+    <span class="line-2">PLANNING</span>
+    <span class="line-3">to start.</span>
+  </div>
+  <a href="#" class="btn btn-lime" style="font-size:14px;padding:20px 48px">Try it free — no account needed</a>
+  <p class="footer-note">built by someone who also couldn't finish their resume ✦</p>
+</section>
+
+<script>
+// Cursor
+const cursor = document.getElementById('cursor');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX - 10 + 'px';
+  cursor.style.top  = e.clientY - 10 + 'px';
+});
+document.querySelectorAll('a, button, .tool-card, .pom-mode, .move-card').forEach(el => {
+  el.addEventListener('mouseenter', () => cursor.classList.add('big'));
+  el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
+});
+
+// Breathing text
+const phases = [
+  { text: 'INHALE',  dur: 4000 },
+  { text: 'HOLD',    dur: 7000 },
+  { text: 'EXHALE',  dur: 8000 },
+  { text: 'HOLD',    dur: 4000 },
+];
+let phaseIdx = 0;
+function nextBreath() {
+  document.getElementById('breatheText').textContent = phases[phaseIdx].text;
+  setTimeout(() => { phaseIdx = (phaseIdx + 1) % phases.length; nextBreath(); }, phases[phaseIdx].dur);
+}
+nextBreath();
+
+// Pomodoro
+let pomSeconds = 25 * 60;
+let pomInterval = null;
+function formatTime(s) {
+  const m = Math.floor(s / 60);
+  return `${String(m).padStart(2,'0')}:${String(s % 60).padStart(2,'0')}`;
+}
+function startPom() {
+  if (pomInterval) return;
+  pomInterval = setInterval(() => {
+    pomSeconds--;
+    document.getElementById('pomTimer').textContent = formatTime(pomSeconds);
+    if (pomSeconds <= 0) { clearInterval(pomInterval); pomInterval = null; pomSeconds = 25*60; document.getElementById('pomTimer').textContent = 'DONE!'; }
+  }, 1000);
+}
+function resetPom() {
+  clearInterval(pomInterval); pomInterval = null;
+  pomSeconds = 25 * 60;
+  document.getElementById('pomTimer').textContent = formatTime(pomSeconds);
+}
+
+// Pom mode switching
+document.querySelectorAll('.pom-mode').forEach((card, i) => {
+  const times = [25*60, 15*60, 10*60];
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.pom-mode').forEach(c => c.classList.remove('active'));
+    card.classList.add('active');
+    clearInterval(pomInterval); pomInterval = null;
+    pomSeconds = times[i];
+    document.getElementById('pomTimer').textContent = formatTime(pomSeconds);
+  });
+});
+</script>
+</body>
+</html>
