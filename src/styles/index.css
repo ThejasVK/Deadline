@@ -24,26 +24,33 @@ body {
   color: var(--white);
   font-family: 'Space Mono', monospace;
   overflow-x: hidden;
-  cursor: none;
+  cursor: auto;
 }
 
 /* Custom cursor */
 .cursor {
-  width: 20px;
-  height: 20px;
-  background: var(--lime);
+  width: 24px;
+  height: 24px;
+  border: 3px solid var(--lime);
+  background: rgba(200, 241, 53, 0.3);
   border-radius: 50%;
   position: fixed;
   top: 0;
   left: 0;
   pointer-events: none;
-  z-index: 9999;
-  mix-blend-mode: difference;
-  transition: transform 0.15s ease;
+  z-index: 99999;
+  box-shadow: 0 0 15px var(--lime), inset 0 0 10px rgba(200, 241, 53, 0.6), 0 0 20px rgba(200, 241, 53, 0.4);
+  opacity: 1;
+  visibility: visible;
+  display: block;
+  will-change: transform, left, top;
+  transform: scale(1);
+  transition: transform 0.1s ease-out;
 }
 
 .cursor.big {
-  transform: scale(3);
+  transform: scale(2.5);
+  box-shadow: 0 0 25px var(--lime), inset 0 0 15px rgba(200, 241, 53, 0.8), 0 0 30px rgba(200, 241, 53, 0.6);
 }
 
 /* Animations */
@@ -111,6 +118,15 @@ body {
 .btn-secondary:hover {
   background: var(--lime);
   color: var(--black);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn:disabled:hover {
+  transform: none;
 }
 
 /* Typography */

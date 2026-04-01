@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import '../styles/Navigation.css'
 
-export default function Navigation({ onManagerClick }) {
+export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -24,15 +24,7 @@ export default function Navigation({ onManagerClick }) {
         <ul className={`navbar-menu ${isOpen ? 'active' : ''}`}>
           <li><a href="#features">Features</a></li>
           <li><a href="#how-it-works">How It Works</a></li>
-          <li>
-            <button 
-              onClick={onManagerClick}
-              className="btn btn-lime"
-              style={{ marginTop: 0 }}
-            >
-              👔 Manager Mode
-            </button>
-          </li>
+          <li><a href="#pricing">Pricing</a></li>
           <li><button className="btn btn-primary">Get Started</button></li>
         </ul>
       </div>

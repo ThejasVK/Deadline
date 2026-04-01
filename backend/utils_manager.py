@@ -3,20 +3,34 @@ Manager AI - Acts like a PM/Manager tracking progress
 """
 
 import os
-from groq import Groq
 from datetime import datetime, timedelta
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+client = None
 
-if not GROQ_API_KEY:
-    print("⚠️  Warning: GROQ_API_KEY not set in .env")
-
-client = Groq(api_key=GROQ_API_KEY)
+if GROQ_API_KEY:
+    try:
+        from groq import Groq
+        client = Groq(api_key=GROQ_API_KEY)
+        print("✅ Manager AI connected")
+    except Exception as e:
+        print(f"⚠️  Manager AI initialization failed: {e}")
+        client = None
+else:
+    print("⚠️  GROQ_API_KEY not set - Manager features disabled")
 
 def get_deadline_warning(task_title: str, due_date: str, days_remaining: int) -> str:
     """
     Generate a deadline warning from manager perspective
     """
+    if not client:
+        if days_remaining < 0:
+            return f"⏰ OVERDUE: {task_title} - Due was {due_date}!"
+        elif days_remaining <= 1:
+            return f"🚨 URGENT: {task_title} - Due {due_date}"
+        else:
+            return f"📌 Reminder: {task_title} - Due {due_date}"
+    
     try:
         urgency = "URGENT" if days_remaining <= 1 else "OVERDUE" if days_remaining < 0 else "REMINDER"
         

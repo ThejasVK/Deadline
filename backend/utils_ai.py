@@ -3,20 +3,30 @@ AI Integration with Groq API
 """
 
 import os
-from groq import Groq
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+client = None
 
-if not GROQ_API_KEY:
-    print("⚠️  Warning: GROQ_API_KEY not set in .env")
-
-client = Groq(api_key=GROQ_API_KEY)
+if GROQ_API_KEY:
+    try:
+        from groq import Groq
+        client = Groq(api_key=GROQ_API_KEY)
+        print("✅ Groq API connected")
+    except Exception as e:
+        print(f"⚠️  Groq initialization failed: {e}")
+        client = None
+else:
+    print("⚠️  GROQ_API_KEY not set - AI features disabled")
+    print("ℹ️  To enable: Set GROQ_API_KEY in backend/.env")
 
 def break_down_task(task_title: str) -> list:
     """
     Break down a task into subtasks using Groq API
     Returns: ["subtask 1", "subtask 2", ...]
     """
+    if not client:
+        return [task_title]
+    
     try:
         message = client.chat.completions.create(
             messages=[
@@ -59,6 +69,9 @@ def get_motivation(task_title: str) -> str:
     """
     Get a motivational message for a task
     """
+    if not client:
+        return "You've got this! Just start now. 💪"
+    
     try:
         message = client.chat.completions.create(
             messages=[
@@ -85,6 +98,9 @@ def generate_reminder(task_title: str) -> str:
     """
     Generate a gentle reminder to complete a task
     """
+    if not client:
+        return f"Don't forget: {task_title} is waiting for you! Go get it. 🚀"
+    
     try:
         message = client.chat.completions.create(
             messages=[
@@ -111,7 +127,7 @@ def check_groq_connection() -> bool:
     """
     Test if Groq API is accessible
     """
-    if not GROQ_API_KEY:
+    if not client:
         return False
     
     try:

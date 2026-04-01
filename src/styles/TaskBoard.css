@@ -19,6 +19,28 @@
   color: rgba(255, 255, 255, 0.6);
 }
 
+.error-banner {
+  background: rgba(255, 77, 141, 0.1);
+  border: 1px solid rgba(255, 77, 141, 0.3);
+  color: var(--pink);
+  padding: 12px 16px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  animation: fadeUp 0.3s ease both;
+}
+
+.loading-banner {
+  background: rgba(200, 241, 53, 0.1);
+  border: 1px solid rgba(200, 241, 53, 0.3);
+  color: var(--lime);
+  padding: 12px 16px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  animation: fadeUp 0.3s ease both;
+}
+
 .taskboard-input {
   display: flex;
   gap: 12px;
