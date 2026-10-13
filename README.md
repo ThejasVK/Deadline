@@ -5,9 +5,19 @@ A productivity app built for people who procrastinate. Get AI-powered accountabi
 ## Tech Stack
 
 - **Frontend**: React + Vite
-- **Backend**: Supabase (PostgreSQL)
-- **AI**: Ollama (Local LLM)
-- **Deployment**: Vercel
+- **Backend**: Python FastAPI (task CRUD, AI and "manager mode" routes), SQLAlchemy on PostgreSQL
+- **AI**: Groq-hosted LLM for task breakdowns, motivation and reminders (Ollama supported for local runs)
+- **Logging**: structured request and AI-call logs with a viewer in the app
+
+## How it works
+
+1. You add a task you've been putting off.
+2. The AI breaks it into small, concrete next steps and estimates time for each.
+3. "Manager mode" checks progress, flags tasks going stale, and asks for an update, like a manager who actually helps.
+
+## Docs
+
+Setup and design notes live in [`docs/`](docs/): [getting started](docs/GETTING_STARTED.md), [backend setup](docs/BACKEND_SETUP.md), [Postgres setup](docs/POSTGRES_SETUP.md), [manager mode architecture](docs/MANAGER_ARCHITECTURE.md), [logging](docs/LOGGING_GUIDE.md).
 
 ## Project Structure
 
