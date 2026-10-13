@@ -12,7 +12,7 @@ A productivity app built for people who procrastinate. Get AI-powered accountabi
 ## How it works
 
 1. You add a task you've been putting off.
-2. The AI breaks it into small, concrete next steps and estimates time for each.
+2. The AI breaks it into small, concrete next steps.
 3. "Manager mode" checks progress, flags tasks going stale, and asks for an update, like a manager who actually helps.
 
 ## Docs
